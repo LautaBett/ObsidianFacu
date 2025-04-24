@@ -1,4 +1,4 @@
-¡Claro! Aquí tienes la clasificación de las instrucciones MIPS utilizadas en la nota [[Facultad/Segundo/PrimerCuatri/Arqui/teoria/Mips/Ejercicios]] según su formato (Tipo-R, Tipo-I, Tipo-J), basándonos en las definiciones de [[Mips]] y [[Primer video]]:
+¡Claro! Aquí tienes la clasificación de las instrucciones MIPS utilizadas en la nota [[Ejercicios]] según su formato (Tipo-R, Tipo-I, Tipo-J), basándonos en las definiciones de [[Mips]] y [[Primer video]]:
 
 **Recordatorio de Formatos:**
 
@@ -127,9 +127,9 @@
 Esta clasificación te ayuda a ver cómo se utilizan los diferentes formatos de instrucción MIPS para construir las secuencias de código de los ejercicios.
 
 
-¡Entendido! Quieres una explicación detallada de cada tipo de instrucción (R, I, J) y de las instrucciones específicas que aparecen en la nota [[Facultad/Segundo/PrimerCuatri/Arqui/teoria/Mips/Ejercicios]], explicando qué hacen, su formato general y cómo se usan en los ejemplos.
+¡Entendido! Quieres una explicación detallada de cada tipo de instrucción (R, I, J) y de las instrucciones específicas que aparecen en la nota [[Ejercicios]], explicando qué hacen, su formato general y cómo se usan en los ejemplos.
 
-Aquí vamos, basándonos en la información de [[Mips]], [[Primer video]] y los ejemplos de [[Facultad/Segundo/PrimerCuatri/Arqui/teoria/Mips/Ejercicios]]:
+Aquí vamos, basándonos en la información de [[Mips]], [[Primer video]] y los ejemplos de [[Ejercicios]]:
 
 ---
 
@@ -144,7 +144,7 @@ Aquí vamos, basándonos en la información de [[Mips]], [[Primer video]] y los 
     *   `shamt`: Cantidad de desplazamiento (usado solo en instrucciones de desplazamiento como `sll`).
     *   `funct`: Código de función que especifica la operación exacta (ej. suma, resta, AND, OR, desplazamiento).
 
-**Instrucciones Tipo-R en [[Facultad/Segundo/PrimerCuatri/Arqui/teoria/Mips/Ejercicios]]:**
+**Instrucciones Tipo-R en [[Ejercicios]]:**
 
 1.  **`add rd, rs, rt`**
     *   **Operación (`funct`):** Suma con signo (maneja overflow).
@@ -206,7 +206,7 @@ Aquí vamos, basándonos en la información de [[Mips]], [[Primer video]] y los 
     *   `rt`: Registro destino (para `addi`, `lw`) o segundo registro fuente (para `beq`/`bne`, `sw`).
     *   `immediate`: Valor constante de 16 bits. Se extiende con signo para operaciones aritméticas (`addi`) y cálculo de direcciones (`lw`/`sw`, `beq`/`bne`).
 
-**Instrucciones Tipo-I en [[Facultad/Segundo/PrimerCuatri/Arqui/teoria/Mips/Ejercicios]]:**
+**Instrucciones Tipo-I en [[Ejercicios]]:**
 
 1.  **`addi rt, rs, immediate`** (Add Immediate)
     *   **Operación (`op`):** Suma inmediata con signo (maneja overflow).
@@ -276,7 +276,7 @@ Aquí vamos, basándonos en la información de [[Mips]], [[Primer video]] y los 
     *   `op`: Código de operación principal.
     *   `target_address`: Campo de 26 bits que forma parte de la dirección de destino.
 
-**Instrucciones Tipo-J en [[Facultad/Segundo/PrimerCuatri/Arqui/teoria/Mips/Ejercicios]]:**
+**Instrucciones Tipo-J en [[Ejercicios]]:**
 
 1.  **`j label`** (Jump)
     *   **Operación (`op`):** Salto incondicional.
@@ -300,4 +300,4 @@ Aquí vamos, basándonos en la información de [[Mips]], [[Primer video]] y los 
 
 ---
 
-Espero que esta explicación detallada de cada instrucción y su uso en los ejemplos te sea útil para entender el código MIPS de la nota [[Facultad/Segundo/PrimerCuatri/Arqui/teoria/Mips/Ejercicios]].
+Espero que esta explicación detallada de cada instrucción y su uso en los ejemplos te sea útil para entender el código MIPS de la nota [[Ejercicios]].
