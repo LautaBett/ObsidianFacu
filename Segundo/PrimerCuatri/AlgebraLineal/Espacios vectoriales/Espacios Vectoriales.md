@@ -71,8 +71,7 @@ Lo escribimos como $\langle V, +, * \rangle$.
 ---
 
 ## <span style="color:green;">3. Ejemplos de Espacios Vectoriales</span>
-
-### <span style="color:teal;">Ejemplo 1: $\mathbb{R}^n$ (Generalización de $\mathbb{R}^2$)</span>
+Ejemplo 1: $\mathbb{R}^n$ (Generalización de $\mathbb{R}^2$)
 
 *   **Conjunto V:** $\mathbb{R}^n$, el conjunto de n-tuplas (listas ordenadas de $n$ números reales).
 *   **Vectores:** $(x_1, x_2, \dots, x_n)$.
@@ -81,7 +80,7 @@ Lo escribimos como $\langle V, +, * \rangle$.
 *   **Producto por escalar:** $\lambda (x_1, \dots, x_n) = (\lambda x_1, \dots, \lambda x_n)$ (multiplica cada componente).
 *   Se puede verificar que cumple las 8 propiedades. $\mathbb{R}^2$ y $\mathbb{R}^3$ son los casos más familiares.
 
-### <span style="color:teal;">Ejemplo 2: Polinomios $P_n[X]$</span>
+Ejemplo 2: Polinomios $P_n[X]$
 
 *   **Conjunto V:** $P_n[X]$, el conjunto de todos los polinomios con coeficientes reales de grado *menor o igual* que $n$, más el polinomio cero.
 *   **Vectores:** Polinomios como $P(x) = a_n x^n + \dots + a_1 x + a_0$.
