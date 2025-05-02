@@ -1,4 +1,4 @@
-Title: <a href="obsidian://open?file=Facultad%2FSegundo%2FPrimerCuatri%2FAlgebraLineal%2FRectas%2CPlanos%2CRango%2FEjercicios.md">Ejercicios</a>
+d                	Title: <a href="obsidian://open?file=Facultad%2FSegundo%2FPrimerCuatri%2FAlgebraLineal%2FRectas%2CPlanos%2CRango%2FEjercicios.md">Ejercicios</a>
 Path: Facultad/Segundo/PrimerCuatri/AlgebraLineal/Rectas,Planos,Rango/Ejercicios.md
 
 # Resolución de Ejercicios de Álgebra Lineal
@@ -312,3 +312,78 @@ Path: Facultad/Segundo/PrimerCuatri/AlgebraLineal/Rectas,Planos,Rango/Ejercicios
         *   $k_1 = \frac{-5 + 13}{-4} = \frac{8}{-4} = -2$
         *   $k_2 = \frac{-5 - 13}{-4} = \frac{-18}{-4} = \frac{9}{2}$
 *   **Conclusión:** El conjunto de vectores es linealmente independiente si $k \neq 0$, $k \neq -2$ y $k \neq \frac{9}{2}$.
+
+
+
+
+EJERCICIO 8 
+
+Para determinar los valores de $k$ para los cuales el conjunto $B = \{u - 2w, u + v, kw - u + v\}$ es linealmente independiente (L.I.), debemos plantear la ecuación de dependencia lineal y ver para qué valores de $k$ la única solución es la trivial (todos los escalares igPara determinar los valores de $k$ para los cuales el conjunto $B = \{u - 2w, u + v, kw - u + v\}$ es linealmente independiente (L.I.), debemos plantear la ecuación de dependencia lineal y ver para qué valores de $k$ la única solución es la trivial (todos los escalares iguales a cero).
+
+Basándonos en la definición de independencia lineal explicada en la sección 5 de la nota [[Espacios Vectoriales]], un conjunto de vectores $\{v_1, v_2, v_3\}$ es L.I. si la única solución de la ecuación $\alpha_1 v_1 + \alpha_2 v_2 + \alpha_3 v_3 = \vec{0}$ es $\alpha_1 = \alpha_2 = \alpha_3 = 0$.
+
+Aplicamos esto a nuestro conjunto $B$:
+Buscamos escalares $\alpha_1, \alpha_2, \alpha_3$ tales que:
+$\alpha_1 (u - 2w) + \alpha_2 (u + v) + \alpha_3 (kw - u + v) = \vec{0}$
+
+Ahora, reagrupamos los términos según los vectores $u, v, w$:
+$(\alpha_1 + \alpha_2 - \alpha_3) u + (\alpha_2 + \alpha_3) v + (-2\alpha_1 + k\alpha_3) w = \vec{0}$
+
+Para que esta ecuación se cumpla, y asumiendo que los vectores originales $\{u, v, w\}$ son linealmente independientes (lo cual es una suposición estándar en este tipo de ejercicios, a menos que se indique lo contrario), los coeficientes de $u, v, w$ deben ser todos cero. Esto nos da el siguiente sistema de ecuaciones homogéneo para $\alpha_1, \alpha_2, \alpha_3$:
+
+1.  $\alpha_1 + \alpha_2 - \alpha_3 = 0$
+2.  $\alpha_2 + \alpha_3 = 0$
+3.  $-2\alpha_1 + 0\alpha_2 + k\alpha_3 = 0$
+
+El conjunto $B$ será linealmente independiente si y solo si este sistema de ecuaciones tiene como única solución la trivial ($\alpha_1 = 0, \alpha_2 = 0, \alpha_3 = 0$). Como se explica en la sección 6 de [[Espacios Vectoriales]], para un sistema homogéneo cuadrado, esto ocurre si y solo si el determinante de la matriz de coeficientes es distinto de cero.
+
+La matriz de coeficientes del sistema es:
+$A = \begin{pmatrix} 1 & 1 & -1 \\ 0 & 1 & 1 \\ -2 & 0 & k \end{pmatrix}$
+
+Calculamos su determinante:
+$\det(A) = 1 \cdot \det\begin{pmatrix} 1 & 1 \\ 0 & k \end{pmatrix} - 1 \cdot \det\begin{pmatrix} 0 & 1 \\ -2 & k \end{pmatrix} + (-1) \cdot \det\begin{pmatrix} 0 & 1 \\ -2 & 0 \end{pmatrix}$
+$\det(A) = 1(1 \cdot k - 1 \cdot 0) - 1(0 \cdot k - 1 \cdot (-2)) - 1(0 \cdot 0 - 1 \cdot (-2))$
+$\det(A) = 1(k) - 1(2) - 1(2)$
+$\det(A) = k - 2 - 2$
+$\det(A) = k - 4$
+
+Para que el conjunto $B$ sea linealmente independiente, el determinante debe ser distinto de cero:
+$\det(A) \neq 0$
+$k - 4 \neq 0$
+$k \neq 4$
+
+Por lo tanto, el conjunto $B = \{u - 2w, u + v, kw - u + v\}$ es linealmente independiente para todos los valores de $k$ tales que $k \neq 4$.uales a cero).
+
+Basándonos en la definición de independencia lineal explicada en la sección 5 de la nota [[Espacios Vectoriales]], un conjunto de vectores $\{v_1, v_2, v_3\}$ es L.I. si la única solución de la ecuación $\alpha_1 v_1 + \alpha_2 v_2 + \alpha_3 v_3 = \vec{0}$ es $\alpha_1 = \alpha_2 = \alpha_3 = 0$.
+
+Aplicamos esto a nuestro conjunto $B$:
+Buscamos escalares $\alpha_1, \alpha_2, \alpha_3$ tales que:
+$\alpha_1 (u - 2w) + \alpha_2 (u + v) + \alpha_3 (kw - u + v) = \vec{0}$
+
+Ahora, reagrupamos los términos según los vectores $u, v, w$:
+$(\alpha_1 + \alpha_2 - \alpha_3) u + (\alpha_2 + \alpha_3) v + (-2\alpha_1 + k\alpha_3) w = \vec{0}$
+
+Para que esta ecuación se cumpla, y asumiendo que los vectores originales $\{u, v, w\}$ son linealmente independientes (lo cual es una suposición estándar en este tipo de ejercicios, a menos que se indique lo contrario), los coeficientes de $u, v, w$ deben ser todos cero. Esto nos da el siguiente sistema de ecuaciones homogéneo para $\alpha_1, \alpha_2, \alpha_3$:
+
+1.  $\alpha_1 + \alpha_2 - \alpha_3 = 0$
+2.  $\alpha_2 + \alpha_3 = 0$
+3.  $-2\alpha_1 + 0\alpha_2 + k\alpha_3 = 0$
+
+El conjunto $B$ será linealmente independiente si y solo si este sistema de ecuaciones tiene como única solución la trivial ($\alpha_1 = 0, \alpha_2 = 0, \alpha_3 = 0$). Como se explica en la sección 6 de [[Espacios Vectoriales]], para un sistema homogéneo cuadrado, esto ocurre si y solo si el determinante de la matriz de coeficientes es distinto de cero.
+
+La matriz de coeficientes del sistema es:
+$A = \begin{pmatrix} 1 & 1 & -1 \\ 0 & 1 & 1 \\ -2 & 0 & k \end{pmatrix}$
+
+Calculamos su determinante:
+$\det(A) = 1 \cdot \det\begin{pmatrix} 1 & 1 \\ 0 & k \end{pmatrix} - 1 \cdot \det\begin{pmatrix} 0 & 1 \\ -2 & k \end{pmatrix} + (-1) \cdot \det\begin{pmatrix} 0 & 1 \\ -2 & 0 \end{pmatrix}$
+$\det(A) = 1(1 \cdot k - 1 \cdot 0) - 1(0 \cdot k - 1 \cdot (-2)) - 1(0 \cdot 0 - 1 \cdot (-2))$
+$\det(A) = 1(k) - 1(2) - 1(2)$
+$\det(A) = k - 2 - 2$
+$\det(A) = k - 4$
+
+Para que el conjunto $B$ sea linealmente independiente, el determinante debe ser distinto de cero:
+$\det(A) \neq 0$
+$k - 4 \neq 0$
+$k \neq 4$
+
+Por lo tanto, el conjunto $B = \{u - 2w, u + v, kw - u + v\}$ es linealmente independiente para todos los valores de $k$ tales que $k \neq 4$.
