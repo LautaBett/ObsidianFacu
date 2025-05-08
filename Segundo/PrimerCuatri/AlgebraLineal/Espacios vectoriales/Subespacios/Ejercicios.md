@@ -123,7 +123,7 @@ En resumen, en este caso particular, el sistema tiene una única solución (la s
   
 #### EN LA B TENEMOS
 
-¡Entendido! Para el ejercicio 14b de [[Ejercicios]], tenemos el sistema homogéneo $A\mathbf{x} = \vec{0}$, donde:
+¡Entendido! Para el ejercicio 14b de [[Facultad/Segundo/PrimerCuatri/AlgebraLineal/Espacios vectoriales/Subespacios/Ejercicios]], tenemos el sistema homogéneo $A\mathbf{x} = \vec{0}$, donde:
 
 $A = \begin{pmatrix} 1 & 2 & 1 & 2 & 1 \\ 1 & 2 & 2 & 1 & 2 \\ 2 & 4 & 3 & 3 & 3 \\ 0 & 0 & 1 & -1 & -1 \end{pmatrix}$, $\mathbf{x} = \begin{pmatrix} x \\ y \\ z \\ t \\ u \end{pmatrix}$, y $\vec{0} = \begin{pmatrix} 0 \\ 0 \\ 0 \\ 0 \end{pmatrix}$.
 

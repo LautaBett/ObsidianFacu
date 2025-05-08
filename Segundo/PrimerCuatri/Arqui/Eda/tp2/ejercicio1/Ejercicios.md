@@ -359,3 +359,138 @@ Aquí te explico cómo observarlo:
     *   Busca esta diferencia de aproximadamente 1150 ns entre los tiempos medidos en EPWave.
 
 En resumen: La diferencia de latencia se manifiesta como una **diferencia en el tiempo transcurrido en el eje horizontal de EPWave** desde el inicio de la ejecución (`reset` = '0') hasta que cada programa alcanza su punto final o estado estable (el `j 0x70` para `program1`, el bucle `j 0x1C` para `program2`), lo cual puedes rastrear observando la señal `reg_pc`.
+
+
+
+
+
+
+
+
+¡Claro! Calculemos la diferencia de latencia entre los dos programas que has proporcionado, basándonos en el número de instrucciones ejecutadas y el período de reloj de 50 ns (según [[Facultad/Segundo/PrimerCuatri/Arqui/Eda/tp2/ejercicio1/Ejercicios.md]]).
+
+**Análisis de `program1` (el segundo programa que proporcionaste):**
+
+```mips
+main:
+  lw $t1, 0($zero)       # 1
+  lw $t2, 4($zero)       # 2
+  lw $t3, 8($zero)       # 3
+  lw $t4, 12($zero)      # 4
+  lw $t5, 16($zero)      # 5
+  lw $t6, 20($zero)      # 6
+  sw $t1, 24($zero)      # 7
+  sw $t2, 28($zero)      # 8
+  sw $t3, 32($zero)      # 9
+  sw $t4, 36($zero)      # 10
+  sw $t5, 40($zero)      # 11
+  sw $t6, 44($zero)      # 12
+  lw $t1, 24($zero)      # 13
+  lw $t2, 28($zero)      # 14
+  lw $t3, 32($zero)      # 15
+  lw $t4, 36($zero)      # 16
+  lw $t5, 40($zero)      # 17
+  lw $t6, 44($zero)      # 18
+  add $t7, $t1, $t2      # 19
+  add $s0, $t3, $t4      # 20
+  sub $s1, $t5, $t1      # 21
+  sub $s2, $t6, $t2      # 22
+  and $s3, $t1, $t2      # 23
+  and $s4, $t7, $t2      # 24
+  or $s5, $t1, $t2       # 25
+  or $s6, $s0, $t2       # 26
+  slt $s7, $t1, $t2      # 27
+  slt $t8, $s0, $t2      # 28
+end_program:
+  j end_program          # 29 (Entra en bucle infinito aquí)
+```
+
+*   **Número de Instrucciones Ejecutadas (`program1`):** Este programa es completamente secuencial hasta el salto final. Ejecuta **29** instrucciones antes de entrar en el bucle `j end_program`.
+*   **Latencia (`program1`):** 29 instrucciones * 50 ns/instrucción = **1450 ns**.
+
+**Análisis de `program2` (el primer programa que proporcionaste, con `Mem[20]=32`):**
+
+*   Como calculamos en la respuesta anterior, este programa ejecuta **101** instrucciones antes de entrar en su bucle infinito final (`j end_program`).
+*   **Latencia (`program2`):** 101 instrucciones * 50 ns/instrucción = **5050 ns**.
+* ¡Perfecto! Con el código ensamblador y la sección `.data` que proporcionaste, ahora el comportamiento tiene todo el sentido. Mi análisis anterior se basaba en una suposición diferente sobre el contenido de `data`.
+
+Analicemos `program2` con tus datos:
+
+**Datos Iniciales:**
+
+*   `Mem[0]` (`num0`) = 1
+*   `Mem[4]` (`num1`) = 2
+*   ...
+*   `Mem[20]` (`num5`) = **32**
+*   `Mem[24]` (`num6`) = 0
+
+**Código Ensamblador:**
+
+```mips
+main:
+  lw $t1, 0($zero)       # $t1 = Mem[0] = 1
+  lw $t2, 20($zero)      # $t2 = Mem[20] = 32
+  add $t3, $zero, $zero  # $t3 = 0
+init_loop:
+  beq $t3,$t2,end_loop   # Salta a end_loop si $t3 == $t2
+  add $t3,$t3,$t1        # Si no salta: $t3 = $t3 + $t1 (incrementa $t3 en 1)
+  j init_loop            # Vuelve al beq
+end_loop:
+  sw $t3, 24($zero)      # Almacena el valor final de $t3 en Mem[24]
+end_program:
+  j end_program          # Bucle infinito final
+```
+
+**Flujo de Ejecución Detallado:**
+
+1.  **Setup (3 instrucciones):**
+    *   `lw $t1, 0($zero)` -> `$t1` se carga con 1.
+    *   `lw $t2, 20($zero)` -> `$t2` se carga con 32.
+    *   `add $t3, $zero, $zero` -> `$t3` se inicializa a 0.
+
+2.  **Bucle `init_loop`:**
+    *   **Iteración 1:**
+        *   `beq $t3,$t2,end_loop` -> Compara `$t3`(0) con `$t2`(32). No son iguales. **No salta.** (1 instrucción)
+        *   `add $t3,$t3,$t1` -> `$t3` = 0 + 1 = 1. (1 instrucción)
+        *   `j init_loop` -> Salta a `init_loop`. (1 instrucción)
+    *   **Iteración 2:**
+        *   `beq $t3,$t2,end_loop` -> Compara `$t3`(1) con `$t2`(32). No son iguales. **No salta.** (1 instrucción)
+        *   `add $t3,$t3,$t1` -> `$t3` = 1 + 1 = 2. (1 instrucción)
+        *   `j init_loop` -> Salta a `init_loop`. (1 instrucción)
+    *   ... (Este patrón de 3 instrucciones por iteración se repite) ...
+    *   **Iteración 32:**
+        *   `beq $t3,$t2,end_loop` -> Compara `$t3`(31) con `$t2`(32). No son iguales. **No salta.** (1 instrucción)
+        *   `add $t3,$t3,$t1` -> `$t3` = 31 + 1 = 32. (1 instrucción)
+        *   `j init_loop` -> Salta a `init_loop`. (1 instrucción)
+    *   **Última comprobación del `beq`:**
+        *   `beq $t3,$t2,end_loop` -> Compara `$t3`(32) con `$t2`(32). ¡Son iguales! **Salta** a `end_loop`. (1 instrucción)
+
+3.  **Después del Bucle (1 instrucción):**
+    *   `sw $t3, 24($zero)` -> Almacena `$t3`(32) en `Mem[24]`.
+
+4.  **Bucle Final (1 instrucción + repeticiones):**
+    *   `j end_program` -> Salta a sí mismo, quedando en un bucle infinito.
+
+**Conteo Total de Instrucciones (antes del bucle final):**
+
+*   Setup: 3 instrucciones.
+*   Iteraciones del bucle donde NO se salta: El bucle (`beq` no tomado + `add` + `j`) se ejecuta cuando `$t3` va de 0 a 31. Eso son 32 iteraciones. Cada iteración son 3 instrucciones. Total = 32 * 3 = 96 instrucciones.
+*   Última comprobación del `beq` (cuando SÍ se salta): 1 instrucción.
+*   Instrucción `sw` después del bucle: 1 instrucción.
+*   **Total = 3 + 96 + 1 + 1 = 101 instrucciones.**
+
+**Conclusión:**
+
+Tu análisis es correcto. Con los datos proporcionados (`Mem[20] = 32`), el programa `program2` ejecuta un **bucle finito** (`init_loop`) que itera 32 veces (incrementando `$t3` de 0 a 32). El número total de instrucciones ejecutadas antes de entrar en el bucle infinito final (`j end_program`) es exactamente **101**. Esto coincide perfectamente con tu observación de que ejecuta "alrededor de 100 instrucciones".
+
+**Diferencia de Latencia:**
+
+*   Diferencia = Latencia(`program2`) - Latencia(`program1`)
+*   Diferencia = 5050 ns - 1450 ns = **3600 ns**
+
+**Conclusión:**
+
+El `program2` (el que tiene el bucle `init_loop`) tiene una latencia significativamente mayor que el `program1` (el secuencial). La diferencia de latencia es de **3600 ns**. Esto se debe a que `program2` ejecuta 101 - 29 = 72 instrucciones más que `program1` antes de alcanzar su estado final de bucle infinito.
+
+
+al final para calcular la latencia de program dos como cantidad de instrucciones se toma solo antes del bucle

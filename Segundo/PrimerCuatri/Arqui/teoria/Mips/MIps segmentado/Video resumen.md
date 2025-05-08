@@ -1,0 +1,2 @@
+la segmentacion se aplica cuando tenenmos procesos secuenciales que ocurren uno detras del otoro y cada proceso de puede dividir en etapas, sirve par aumentar laproductividad , disinuir el tiempo de  ejecucoion de un proceso, los recuerosso que terminan una etapa pueden seguir  la siguiente 
+el timpo de un proceso segmentado, es mayor al tiempo de un proceso segmentado del esquema anterior 
