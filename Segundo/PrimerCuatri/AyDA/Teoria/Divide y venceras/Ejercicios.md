@@ -664,3 +664,300 @@ Escogería el **Algoritmo A**.
 * Los algoritmos exponenciales se vuelven inviables muy rápidamente a medida que $n$ aumenta. Los algoritmos $O(n \log n)$ son considerados eficientes y escalan bien.
 
 ---
+
+
+
+
+
+## OTRA FORMA
+Claro, basándome en la información que proporcionaste sobre la técnica "Divide y Conquista" (de las diapositivas de Claudia Pereira y Liliana Martinez, y de tu nota [[Divide y venceras]]), abordaré los problemas del práctico "ANÁLISIS Y DISEÑO DE ALGORITMOS I - PRÁCTICO: TÉCNICAS DE DISEÑO DE ALGORITMOS: DIVIDE Y CONQUISTA".
+
+---
+
+**ANÁLISIS Y DISEÑO DE ALGORITMOS I**
+**PRÁCTICO: TÉCNICAS DE DISEÑO DE ALGORITMOS: DIVIDE Y CONQUISTA**
+
+**1) Implemente en C++ los métodos de ordenamiento mergesort y quicksort de forma tal que, dado un arreglo de elementos comparables, ordenen sus elementos ascendentemente.**
+
+Ambos algoritmos son ejemplos clásicos de la técnica "Divide y Conquista".
+
+*   **Mergesort:**
+    *   **Divide:** Si el arreglo tiene más de un elemento, se divide en dos subarreglos de tamaño aproximadamente igual (mitad izquierda y mitad derecha).
+    *   **Conquista:** Se ordenan recursivamente los dos subarreglos utilizando Mergesort. Si un subarreglo tiene 0 o 1 elemento, se considera ya ordenado (caso base).
+    *   **Combina:** Se mezclan (merge) los dos subarreglos ordenados para producir un único arreglo ordenado. Este paso implica tomar el menor de los elementos actuales de cada subarreglo y colocarlo en un arreglo auxiliar, repitiendo hasta que todos los elementos de ambos subarreglos se hayan copiado. Luego, se copia el contenido del arreglo auxiliar de vuelta al arreglo original.
+    *   **Esquema (similar al de Pereira/Martinez):**
+        ```cpp
+        void MERGE_SORT(array A, int i, int d) {
+            if (i < d) {
+                int m = (i + d) / 2;
+                MERGE_SORT(A, i, m);       // Conquista (mitad izquierda)
+                MERGE_SORT(A, m + 1, d); // Conquista (mitad derecha)
+                MERGE(A, i, m, d);       // Combina
+            }
+        }
+        ```
+    *   La función `MERGE` tomaría `O(n)` tiempo, donde `n` es el tamaño del segmento `A[i...d]`.
+
+*   **Quicksort:**
+    *   **Divide:**
+        1.  Se elige un elemento del arreglo como "pivote".
+        2.  Se particiona el arreglo (o subarreglo) de tal forma que todos los elementos menores o iguales al pivote queden a su izquierda, y todos los elementos mayores queden a su derecha. El pivote queda en su posición final ordenada. La función de partición devuelve el índice final del pivote.
+    *   **Conquista:** Se ordenan recursivamente los dos subarreglos (el de la izquierda del pivote y el de la derecha del pivote) utilizando Quicksort. El caso base es cuando un subarreglo tiene 0 o 1 elemento.
+    *   **Combina:** No se requiere un paso de combinación explícito, ya que el ordenamiento se realiza "in-place" durante la partición y las llamadas recursivas. Una vez que los subarreglos están ordenados, el arreglo completo está ordenado.
+    *   **Esquema (similar al de Pereira/Martinez):**
+        ```cpp
+        void QUICKSORT(array A, int i, int j) {
+            if (i < j) { // Si hay más de un elemento
+                int p = PARTICION(A, i, j); // Divide y coloca el pivote
+                QUICKSORT(A, i, p - 1);     // Conquista (subarreglo izquierdo)
+                QUICKSORT(A, p + 1, j);     // Conquista (subarreglo derecho)
+            }
+        }
+        ```
+    *   La función `PARTICION` tomaría `O(n)` tiempo, donde `n` es el tamaño del segmento `A[i...j]`.
+
+**2) Sea T un arreglo ordenado de n enteros diferentes (puede incluir números negativos):**
+
+*   **a) Implemente un algoritmo en C++ que encuentre el índice i tal que 0 ≤ i < n y T [i] = i, siempre y cuando exista tal índice. La complejidad temporal de la solución propuesta debe pertenecer a O(log n).**
+
+    Este problema se puede resolver utilizando una modificación de la búsqueda binaria, que es una aplicación de Divide y Conquista (específicamente, reducción, como se menciona en [[Divide y venceras]]).
+
+    **Algoritmo:**
+    1.  Definir una función recursiva (o iterativa) `buscarIndiceIgualValor(T, bajo, alto)`.
+    2.  **Caso Base:** Si `bajo > alto`, el índice no existe en el rango actual, retornar un indicador (ej. -1).
+    3.  **Divide:** Calcular `medio = bajo + (alto - bajo) / 2`.
+    4.  **Conquista:**
+        *   Si `T[medio] == medio`, se encontró el índice. Retornar `medio`.
+        *   Si `T[medio] < medio`: Esto implica que si existe un `i` tal que `T[i] = i`, debe estar en la mitad derecha del arreglo. Como `T` está ordenado y los elementos son distintos, `T[j] < j` para todo `j < medio` (porque `T[j] <= T[medio] - (medio - j) < medio - (medio - j) = j`). Por lo tanto, buscar recursivamente en `buscarIndiceIgualValor(T, medio + 1, alto)`.
+        *   Si `T[medio] > medio`: Esto implica que si existe un `i` tal que `T[i] = i`, debe estar en la mitad izquierda del arreglo. Como `T` está ordenado y los elementos son distintos, `T[j] > j` para todo `j > medio` (porque `T[j] >= T[medio] + (j - medio) > medio + (j - medio) = j`). Por lo tanto, buscar recursivamente en `buscarIndiceIgualValor(T, bajo, medio - 1)`.
+    5.  **Combina:** No hay un paso de combinación explícito; el resultado de la conquista es la solución.
+
+    La complejidad es `O(log n)` porque en cada paso se descarta la mitad del espacio de búsqueda.
+
+*   **b) Explicar por qué una búsqueda binaria es esencial en grandes volúmenes de datos (nube, redes sociales, etc.)**
+
+    La búsqueda binaria es esencial en grandes volúmenes de datos por su eficiencia logarítmica (`O(log n)`).
+    *   **Escalabilidad:** A medida que el tamaño de los datos (`n`) crece enormemente (como en la nube o redes sociales, donde `n` puede ser miles de millones o más), el tiempo de búsqueda lineal (`O(n)`) se vuelve prohibitivamente lento. En contraste, `log n` crece muy lentamente. Por ejemplo:
+        *   Si `n = 1,000,000`, `log_2(n) ≈ 20`.
+        *   Si `n = 1,000,000,000`, `log_2(n) ≈ 30`.
+        Una búsqueda lineal requeriría hasta un millón o mil millones de comparaciones, mientras que la búsqueda binaria requeriría solo 20 o 30.
+    *   **Rendimiento:** En aplicaciones interactivas o sistemas que requieren respuestas rápidas, la diferencia entre `O(log n)` y `O(n)` es la diferencia entre una experiencia de usuario aceptable y una inaceptable.
+    *   **Viabilidad:** Para conjuntos de datos masivos, la búsqueda binaria hace factible encontrar información específica en un tiempo razonable. Sin ella, muchas operaciones en bases de datos grandes, sistemas de indexación, o directorios serían impracticables.
+    *   **Requisito:** La búsqueda binaria requiere que los datos estén ordenados. El costo de mantener los datos ordenados (o de ordenarlos antes de la búsqueda) se compensa con la gran ganancia en velocidad de búsqueda si se realizan muchas búsquedas.
+
+**3) Se tiene un arreglo T de n enteros distintos, ordenado en forma creciente. Dado un rango definido por dos valores enteros x e y, con la condición de que x ≤ y, se requiere implementar un algoritmo en C++ que determine cuántos elementos del arreglo T se encuentran comprendidos entre x e y, inclusive. La complejidad temporal de su algoritmo debe pertenecer a O(log n).**
+
+    Se pueden utilizar dos búsquedas binarias modificadas:
+    1.  **Encontrar el índice del primer elemento mayor o igual a `x` (lower_bound):**
+        *   Llamemos a este índice `idx_inicio`.
+        *   Si no se encuentra ningún elemento `>= x`, o si todos los elementos son `< x`, entonces no hay elementos en el rango.
+    2.  **Encontrar el índice del primer elemento estrictamente mayor que `y` (upper_bound):**
+        *   Llamemos a este índice `idx_fin_exclusivo`.
+        *   Si todos los elementos son `<= y`, `idx_fin_exclusivo` será `n`.
+        *   El último elemento que es `<= y` estará en `idx_fin_exclusivo - 1`.
+
+    **Algoritmo:**
+    *   Implementar una función `lower_bound(T, valor)` que devuelva el índice del primer elemento en `T` que es `>= valor`. Si todos los elementos son menores que `valor`, puede devolver `n`.
+    *   Implementar una función `upper_bound(T, valor)` que devuelva el índice del primer elemento en `T` que es `> valor`. Si todos los elementos son menores o iguales que `valor`, puede devolver `n`.
+
+    Una vez obtenidos `idx_inicio = lower_bound(T, x)` y `idx_fin_exclusivo = upper_bound(T, y)`:
+    *   El número de elementos en el rango `[x, y]` es `idx_fin_exclusivo - idx_inicio`.
+
+    Ambas funciones `lower_bound` y `upper_bound` se pueden implementar con una lógica de búsqueda binaria similar a la del ejercicio 2a, ajustando las condiciones para moverse a la izquierda o derecha. Cada una tiene complejidad `O(log n)`. Por lo tanto, la complejidad total es `O(log n) + O(log n) = O(log n)`.
+
+**4) En ciertas aplicaciones, puede ser necesario combinar información proveniente de distintas fuentes sin alterar su estructura original. Supongamos que se tienen dos vectores X e Y, cada uno con n enteros ordenados en forma creciente. Se desea calcular la mediana del conjunto total de 2n elementos sin necesidad de mezclar ni ordenar explícitamente los vectores. Implemente un algoritmo en C++ que resuelva el problema en un tiempo O(log n).**
+
+    Este es un problema clásico que se puede resolver con Divide y Conquista. La mediana de `2n` elementos es el promedio del `n`-ésimo y `(n+1)`-ésimo elemento si estuvieran todos ordenados (usando 1-indexación). Si buscamos el k-ésimo elemento, podemos encontrar el `n`-ésimo y el `(n+1)`-ésimo. El objetivo es reducir el problema recursivamente.
+
+    **Algoritmo para encontrar el k-ésimo elemento en la unión de X e Y (ambos de tamaño n):**
+    (Asumimos 0-indexación para los arreglos, y k es 0-indexed para el elemento buscado).
+    La mediana de `2n` elementos sería el promedio del elemento en la posición `n-1` y `n` del arreglo combinado (0-indexed). Podemos buscar estos dos elementos.
+
+    **Estrategia general (para encontrar la mediana, que involucra los elementos alrededor de la posición `n` en el combinado):**
+    1.  **Caso Base:** Si `n` es pequeño (e.g., 1 o 2), la mediana se puede calcular directamente.
+        *   Si `n=1`, los elementos son `X[0], Y[0]`. La mediana es `(X[0]+Y[0])/2`.
+    2.  **Divide:**
+        *   Encuentra las medianas (o elementos cercanos al medio) de los subarreglos actuales de `X` e `Y`. Sean `mX = X[n/2]` y `mY = Y[n/2]` (ajustar índices para 0-indexación y par/impar).
+    3.  **Conquista:**
+        *   Si `mX == mY`, entonces `mX` (o `mY`) es la mediana de los `2n` elementos.
+        *   Si `mX < mY`:
+            *   La mediana global debe estar en el rango `[mX, mY]`.
+            *   Todos los elementos en `X[0 ... n/2]` son menores o iguales a `mY`.
+            *   Todos los elementos en `Y[n/2 ... n-1]` son mayores o iguales a `mX`.
+            *   Podemos descartar la primera mitad de `X` (elementos `X[0 ... n/2-1]`) y la segunda mitad de `Y` (elementos `Y[n/2+1 ... n-1]`). El número de elementos descartados de cada lado debe ser el mismo para mantener el balance al buscar el k-ésimo elemento.
+            *   El problema se reduce a encontrar la mediana en los subarreglos `X[n/2 ... n-1]` e `Y[0 ... n/2]`. El tamaño efectivo de los arreglos se reduce.
+        *   Si `mX > mY`:
+            *   Similar al caso anterior, pero descartamos la primera mitad de `Y` y la segunda mitad de `X`.
+            *   El problema se reduce a encontrar la mediana en `X[0 ... n/2]` e `Y[n/2 ... n-1]`.
+    4.  Se repite el proceso con los subarreglos más pequeños. Cada paso reduce el tamaño del problema considerado, llevando a una complejidad `O(log n)`.
+
+    *Nota:* La implementación precisa para encontrar la mediana (promedio de dos elementos) o un k-ésimo elemento específico requiere manejar cuidadosamente los índices y el número de elementos descartados para asegurar que se busca el elemento correcto en la siguiente iteración recursiva.
+
+**5) En aplicaciones de monitoreo (...) una secuencia A (...) se llama unimodal si sus elementos primero aumentan y luego disminuyen (...) Implemente un algoritmo en C++ que dado un arreglo unidimensional que almacena una secuencia unimodal encuentre el índice p. La complejidad temporal del algoritmo debe pertenecer a O(log n).**
+
+    Este problema se puede resolver con una búsqueda binaria modificada. El índice `p` corresponde al elemento máximo.
+
+    **Algoritmo:**
+    1.  Definir una función `encontrarPicoUnimodal(A, bajo, alto, n)` donde `n` es el tamaño total del arreglo original para manejar bordes.
+    2.  **Divide:** Calcular `medio = bajo + (alto - bajo) / 2`.
+    3.  **Conquista:**
+        *   **Verificar si `A[medio]` es el pico:**
+            *   Si `medio > 0` y `medio < n-1`: Si `A[medio] > A[medio-1]` y `A[medio] > A[medio+1]`, entonces `medio` es el pico `p`. Retornar `medio`.
+            *   **Casos de borde para el pico:**
+                *   Si `medio == 0` y (`n==1` o `A[0] > A[1]`), entonces `0` es el pico. (Para `n<3` la definición es un poco laxa, pero el problema dice `n >= 3`). Si `n >= 3` y `medio == 0`, esto no sería el pico a menos que `A[0] > A[1]`.
+                *   Si `medio == n-1` y `A[n-1] > A[n-2]`, entonces `n-1` es el pico.
+        *   **Decidir hacia dónde buscar:**
+            *   Si `medio < n-1` y `A[medio] < A[medio+1]`: El pico está en la parte derecha (la secuencia aún está aumentando en `medio`). Buscar en `encontrarPicoUnimodal(A, medio + 1, alto, n)`.
+            *   Si `medio > 0` y `A[medio] < A[medio-1]`: El pico está en la parte izquierda (la secuencia ya está disminuyendo en `medio`). Buscar en `encontrarPicoUnimodal(A, bajo, medio - 1, n)`.
+    4.  **Caso Base de la Búsqueda:** Si `bajo == alto`, entonces `bajo` (o `alto`) es el pico (esto asume que el rango siempre contendrá el pico).
+
+    La complejidad es `O(log n)` porque el espacio de búsqueda se reduce a la mitad en cada paso.
+
+**6) Supongamos que se tiene un arreglo que contiene datos (...) Se desea determinar el valor mínimo y el valor máximo (...)**
+
+*   **a) Resolver el problema implementando un algoritmo iterativo en lenguaje C++.**
+    **Algoritmo Iterativo:**
+    1.  Si el arreglo está vacío o es nulo, manejar el error o retornar valores indicativos.
+    2.  Inicializar `min_val = A[0]` y `max_val = A[0]`.
+    3.  Iterar desde `i = 1` hasta `n-1` (donde `n` es el tamaño del arreglo):
+        *   Si `A[i] < min_val`, entonces `min_val = A[i]`.
+        *   Si `A[i] > max_val`, entonces `max_val = A[i]`.
+    4.  Retornar `(min_val, max_val)`.
+
+*   **b) Resolver el problema utilizando la técnica de divide y conquista, también en C++.**
+    **Algoritmo Divide y Conquista:**
+    1.  Definir una función `encontrarMinMax(A, bajo, alto)` que retorna un par `(min, max)`.
+    2.  **Caso Base:**
+        *   Si `bajo == alto` (un solo elemento): `min = A[bajo]`, `max = A[bajo]`. Retornar `(min, max)`.
+        *   Si `bajo == alto - 1` (dos elementos):
+            *   Comparar `A[bajo]` y `A[alto]`.
+            *   `min = (A[bajo] < A[alto]) ? A[bajo] : A[alto]`.
+            *   `max = (A[bajo] > A[alto]) ? A[bajo] : A[alto]`.
+            *   Retornar `(min, max)`. (1 comparación)
+    3.  **Divide:** Calcular `medio = bajo + (alto - bajo) / 2`.
+    4.  **Conquista:**
+        *   Llamar recursivamente: `(min_izq, max_izq) = encontrarMinMax(A, bajo, medio)`.
+        *   Llamar recursivamente: `(min_der, max_der) = encontrarMinMax(A, medio + 1, alto)`.
+    5.  **Combina:**
+        *   `min_global = (min_izq < min_der) ? min_izq : min_der`.
+        *   `max_global = (max_izq > max_der) ? max_izq : max_der`.
+        *   Retornar `(min_global, max_global)`. (2 comparaciones)
+
+*   **c) Calcular la complejidad temporal de cada uno de los algoritmos implementados en los puntos a) y b).**
+    *   **Iterativo (a):**
+        *   Se realiza un bucle `n-1` veces. Dentro del bucle, se hacen 2 comparaciones en el peor caso.
+        *   Número de comparaciones: `2 * (n-1)`.
+        *   Complejidad temporal: `O(n)`.
+    *   **Divide y Conquista (b):**
+        *   La relación de recurrencia para el número de comparaciones `C(n)` es:
+            `C(n) = 2 * C(n/2) + 2` (2 comparaciones en el paso de combinar)
+            Caso base: `C(2) = 1` (para dos elementos), `C(1) = 0`.
+        *   Resolviendo la recurrencia (si `n` es potencia de 2):
+            `C(n) = 2 * C(n/2) + 2`
+            `= 2 * (2 * C(n/4) + 2) + 2 = 4 * C(n/4) + 4 + 2`
+            `= 2^k * C(n/2^k) + 2 * (1 + 2 + ... + 2^(k-1))`
+            Si `n/2^k = 2` (o sea, `2^k = n/2`, `k = log_2(n/2)`):
+            `C(n) = (n/2) * C(2) + 2 * (2^(log_2(n/2)) - 1)`
+            `C(n) = (n/2) * 1 + 2 * (n/2 - 1) = n/2 + n - 2 = (3n/2) - 2`.
+        *   Número de comparaciones: `(3n/2) - 2`.
+        *   Complejidad temporal: `O(n)`.
+
+*   **d) Realizar un análisis comparativo de eficiencia.**
+    *   **Complejidad Asintótica:** Ambos algoritmos tienen una complejidad temporal de `O(n)`.
+    *   **Número de Comparaciones:**
+        *   Iterativo: `2n - 2` comparaciones.
+        *   Divide y Conquista: `1.5n - 2` comparaciones.
+        El algoritmo de Divide y Conquista realiza menos comparaciones.
+    *   **Sobrecarga (Overhead):**
+        *   El algoritmo iterativo es muy simple y directo, con mínima sobrecarga.
+        *   El algoritmo de Divide y Conquista implica llamadas a funciones recursivas, lo que añade sobrecarga por la gestión de la pila de llamadas. Para arreglos muy pequeños, esta sobrecarga podría hacer que el iterativo sea más rápido en tiempo de ejecución real, a pesar de hacer más comparaciones.
+    *   **Paralelización:** El enfoque de Divide y Conquista es inherentemente más fácil de paralelizar, ya que los subproblemas (encontrar min/max en las dos mitades) son independientes y pueden resolverse en paralelo.
+    *   **Conclusión:** Para problemas secuenciales y arreglos de tamaño moderado, la simplicidad del iterativo podría ser preferible. Para arreglos muy grandes o en contextos donde se puede aprovechar el paralelismo, Divide y Conquista puede ser ventajoso, especialmente por el menor número de comparaciones.
+
+**7) Tu plataforma de e-commerce administra un arreglo ordenado S que contiene n cupones (...) se desea determinar si existe al menos un par de cupones en el arreglo cuya suma sea exactamente igual a x**
+
+*   **a) Implementar un algoritmo en C++ que permita determinar si existe dicho par de cupones.**
+    Aunque el práctico es sobre Divide y Conquista, la solución más eficiente y natural para este problema (dado que el arreglo está ordenado) es el **método de dos punteros**, que no es un ejemplo canónico de DyC como Mergesort, pero sí reduce el espacio del problema en cada paso.
+
+    **Algoritmo de Dos Punteros:**
+    1.  Inicializar `izquierda = 0` y `derecha = n-1`.
+    2.  Mientras `izquierda < derecha`:
+        *   Calcular `suma_actual = S[izquierda] + S[derecha]`.
+        *   Si `suma_actual == x`, se encontró el par. Retornar `true`.
+        *   Si `suma_actual < x`, necesitamos una suma mayor. Incrementar `izquierda` ( `izquierda++` ) para considerar un valor mayor del extremo izquierdo.
+        *   Si `suma_actual > x`, necesitamos una suma menor. Decrementar `derecha` ( `derecha--` ) para considerar un valor menor del extremo derecho.
+    3.  Si el bucle termina ( `izquierda >= derecha` ), no se encontró tal par. Retornar `false`.
+
+    Si se quisiera forzar un enfoque DyC (menos eficiente para este problema):
+    Para cada elemento `S[i]`, buscar `x - S[i]` en el resto del arreglo `S` (excluyendo `S[i]`) usando búsqueda binaria (`O(log n)`). Esto se haría `n` veces, resultando en `O(n log n)`. El método de dos punteros es mejor.
+
+*   **b) Calcule la complejidad temporal.**
+    *   Para el algoritmo de dos punteros:
+        En cada iteración del bucle `while`, o `izquierda` se incrementa o `derecha` se decrementa. Los punteros comienzan en los extremos opuestos y se mueven uno hacia el otro. El bucle se detiene cuando se cruzan. Por lo tanto, el número total de pasos es como máximo `n`.
+        Complejidad temporal: `O(n)`.
+
+**8) Se dispone de un arreglo de enteros que representa las variaciones registradas por sensores (...) Se desea analizar la señal para identificar el intervalo más significativo en cuanto a variación, es decir, el subarreglo contiguo cuya suma sea máxima.**
+
+*   **a) Implementar un algoritmo en C++ que identifique el subarreglo contiguo con la mayor suma posible.**
+    Este es el problema del "Máximo Subarreglo Contiguo". Se puede resolver con Divide y Conquista (como se menciona en [[Divide y venceras]]).
+
+    **Algoritmo Divide y Conquista:**
+    1.  Definir una función `maxSubarraySum(A, bajo, alto)` que retorna la suma máxima.
+    2.  **Caso Base:** Si `bajo == alto`, la suma máxima es `A[bajo]` (o 0 si se permite subarreglo vacío y `A[bajo]` es negativo).
+    3.  **Divide:** Calcular `medio = bajo + (alto - bajo) / 2`.
+    4.  **Conquista:**
+        *   `max_suma_izquierda = maxSubarraySum(A, bajo, medio)` (suma máxima en la mitad izquierda).
+        *   `max_suma_derecha = maxSubarraySum(A, medio + 1, alto)` (suma máxima en la mitad derecha).
+    5.  **Combina:**
+        *   Calcular `max_suma_cruzada`: la suma máxima de un subarreglo que cruza el punto medio.
+            *   Iterar desde `medio` hacia `bajo`: encontrar la suma máxima `suma_borde_izq` de un subarreglo que termina en `medio`.
+            *   Iterar desde `medio + 1` hacia `alto`: encontrar la suma máxima `suma_borde_der` de un subarreglo que comienza en `medio + 1`.
+            *   `max_suma_cruzada = suma_borde_izq + suma_borde_der`.
+        *   La solución es `max(max_suma_izquierda, max_suma_derecha, max_suma_cruzada)`.
+
+*   **b) Determinar la complejidad temporal y analizar qué ocurre si todos los valores del arreglo fueran positivos. ¿Es necesario aplicar la misma técnica en ese caso o existe una solución más simple?**
+    *   **Complejidad Temporal (Divide y Conquista):**
+        La relación de recurrencia es `T(n) = 2 * T(n/2) + O(n)` (el `O(n)` viene de calcular `max_suma_cruzada`).
+        Por el Teorema Maestro, la complejidad es `O(n log n)`.
+        (Nota: El algoritmo de Kadane resuelve este problema en `O(n)` de forma iterativa y es generalmente preferido por su simplicidad y mejor constante).
+    *   **Si todos los valores del arreglo fueran positivos:**
+        Si todos los valores son positivos, el subarreglo contiguo con la mayor suma posible es simplemente **todo el arreglo**. No es necesario aplicar ninguna técnica compleja como Divide y Conquista o Kadane. Se puede calcular la suma de todos los elementos en `O(n)` con una simple iteración.
+
+**9) Supongamos que tenemos 2 algoritmos alternativos para resolver un problema de tamaño n:**
+    *   **a) El algoritmo A resuelve el problema dividiéndolo en dos subproblemas de tamaño n/2, resuelve recursivamente cada subproblema y combina la solución en tiempo lineal.**
+    *   **b) El algoritmo B resuelve el problema resolviendo dos subproblemas de tamaño n-1 y combinando la solución en tiempo constante.**
+    **¿Cuál es el tiempo de ejecución de cada uno de esos algoritmos (en notación Big-O) y cuál escogería para resolver el problema?**
+
+*   **Algoritmo A:**
+    *   Relación de recurrencia: `T(n) = 2 * T(n/2) + c*n` (donde `c*n` es tiempo lineal, `O(n)`).
+    *   Usando el Teorema Maestro:
+        *   `a = 2`, `b = 2`, `f(n) = c*n`.
+        *   `log_b(a) = log_2(2) = 1`.
+        *   Comparamos `f(n)` con `n^(log_b(a)) = n^1 = n`.
+        *   Estamos en el Caso 2 del Teorema Maestro, ya que `f(n) = Θ(n^(log_b(a)))`.
+        *   Por lo tanto, `T(n) = Θ(n log n)`.
+    *   Ejemplos: Mergesort, Quicksort (caso promedio/mejor).
+
+*   **Algoritmo B:**
+    *   Relación de recurrencia: `T(n) = 2 * T(n-1) + c` (donde `c` es tiempo constante, `O(1)`).
+    *   Desarrollando la recurrencia:
+        `T(n) = 2 * T(n-1) + c`
+        `= 2 * (2 * T(n-2) + c) + c = 2^2 * T(n-2) + 2c + c`
+        `= 2^2 * (2 * T(n-3) + c) + 2c + c = 2^3 * T(n-3) + 2^2c + 2c + c`
+        `...`
+        `= 2^k * T(n-k) + c * (2^(k-1) + ... + 2^1 + 2^0)`
+        Si `k = n` (asumiendo `T(0)` es una constante, digamos `d`):
+        `T(n) = 2^n * T(0) + c * (2^n - 1)`
+        `T(n) = d * 2^n + c * 2^n - c = (d+c) * 2^n - c`
+    *   Por lo tanto, `T(n) = O(2^n)`.
+    *   Ejemplos: Cálculo recursivo ingenuo de Fibonacci (aunque la constante de combinación es 1, y el T(0) y T(1) son base), Torres de Hanoi (similar).
+
+*   **¿Cuál escogería?**
+    Se escogería el **Algoritmo A**.
+    *   `O(n log n)` es una complejidad mucho mejor (más eficiente) que `O(2^n)`.
+    *   Los algoritmos exponenciales como el B se vuelven impracticables muy rápidamente a medida que `n` aumenta, mientras que `n log n` escala mucho mejor. Por ejemplo, si `n=30`:
+        *   `30 * log_2(30) ≈ 30 * 4.9 ≈ 147`
+        *   `2^30 ≈ 10^9` (mil millones)
+    La diferencia es astronómica.
+
+--- 
